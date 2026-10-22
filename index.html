@@ -54,7 +54,7 @@
         /* الترويسة والشعار بإطار خارجي أصغر وأنيق */
         .header-section {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .brand-logo-img {
@@ -63,7 +63,7 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--accent-gold);
-            margin: 0 auto 12px auto;
+            margin: 0 auto 10px auto;
             display: block;
             box-shadow: 0 0 25px var(--accent-glow);
             background: #000;
@@ -88,6 +88,46 @@
             color: var(--accent-gold);
             font-weight: 600;
             margin-top: 2px;
+        }
+
+        /* مشغل الرسالة الصوتية للزيارة */
+        .audio-greeting-box {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .audio-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+
+        .audio-player-btn {
+            background: var(--accent-gold);
+            color: #000;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .audio-player-btn:hover {
+            transform: scale(1.05);
         }
 
         /* أزرار التبويبات الرئيسية (الكتالوج / التقييمات) */
@@ -219,7 +259,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            max-height: 360px;
+            max-height: 340px;
             overflow-y: auto;
             padding-right: 2px;
         }
@@ -423,7 +463,7 @@
             transform: translateY(-2px);
         }
 
-        /* نافذة معاينة الصورة (Modal) وتكبيرها */
+        /* نافذة معاينة الصورة (Modal) */
         .image-modal {
             position: fixed;
             inset: 0;
@@ -621,6 +661,18 @@
             <div class="brand-subtitle">أزياء الشارع الفاخرة • Luxury Streetwear</div>
         </div>
 
+        <!-- مشغل الرسالة الصوتية للترحيب بالزيارة (welcome-visit.mp3) -->
+        <div class="audio-greeting-box">
+            <div class="audio-info">
+                <i class="fa-solid fa-volume-high"></i>
+                <span>رسالة ترحيبية بالمعرض</span>
+            </div>
+            <button class="audio-player-btn" onclick="toggleAudio()" id="audioBtn">
+                <i class="fa-solid fa-play" id="audioIcon"></i>
+            </button>
+            <audio id="welcomeAudio" src="welcome-visit.mp3" preload="none"></audio>
+        </div>
+
         <!-- أزرار التبويبات -->
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('catalog', this)">
@@ -775,6 +827,22 @@
         let cart = [];
         let currentOrderToken = "";
 
+        // تشغيل وإيقاف الصوت الترحيبي
+        function toggleAudio() {
+            let audio = document.getElementById('welcomeAudio');
+            let icon = document.getElementById('audioIcon');
+            if (audio.paused) {
+                audio.play();
+                icon.className = "fa-solid fa-pause";
+            } else {
+                audio.pause();
+                icon.className = "fa-solid fa-play";
+            }
+            audio.onended = function() {
+                icon.className = "fa-solid fa-play";
+            };
+        }
+
         // دالة توليد رقم طلب فريد ومضمون الظهور
         function generateOrderToken() {
             if (!currentOrderToken) {
@@ -785,7 +853,6 @@
             if(badge) badge.innerText = currentOrderToken;
         }
 
-        // توليد رقم الطلب فوراً عند تحميل الصفحة
         generateOrderToken();
 
         function addToCart(name, price) {
@@ -824,7 +891,6 @@
             }
             document.getElementById('cartTotalPrice').innerText = total + ' ر.س';
 
-            // بناء نص رسالة الواتساب وتشفيرها بالكامل لضمان ظهور رقم الطلب بوضوح تام
             let messageText = "طلب جديد من الكتالوج\n" +
                               "رقم الطلب: " + currentOrderToken + "\n" +
                               "المنتجات المطلوبة:\n";
@@ -892,6 +958,7 @@
         function setRating(starsCount) {
             currentRating = starsCount;
             let stars = document.querySelectorAll('.star');
+            stars.documentElement.classList // safe
             stars.forEach((star, index) => {
                 if(index < starsCount) {
                     star.classList.add('active');
