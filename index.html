@@ -91,7 +91,7 @@
             margin-top: 2px;
         }
 
-        /* مشغل الرسالة الصوتية التلقائية */
+        /* مشغل الرسالة الصوتية الترحيبية */
         .audio-greeting-box {
             background: rgba(212, 175, 55, 0.08);
             border: 1px solid var(--border-color);
@@ -677,7 +677,7 @@
             <div class="brand-subtitle">أزياء الشارع الفاخرة • Luxury Streetwear</div>
         </div>
 
-        <!-- مشغل الرسالة الصوتية الترحيبية (تعمل تلقائياً عند الدخول) -->
+        <!-- مشغل الرسالة الصوتية الترحيبية -->
         <div class="audio-greeting-box">
             <div class="audio-info">
                 <i class="fa-solid fa-volume-high"></i>
@@ -809,7 +809,7 @@
         <div class="menu-footer">TOP GIVING ELECTRONIC MENU</div>
     </div>
 
-    <!-- نافذة تكبير الصورة (Zoom Modal) -->
+    <!-- نافذة معاينة الصورة (Modal) -->
     <div class="image-modal" id="imageModal" onclick="closeZoom()">
         <button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
         <img id="modalImg" src="" alt="معاينة المنتج">
@@ -842,23 +842,19 @@
     <script>
         let cart = [];
         let currentOrderToken = "";
+        let audioPlayed = false;
 
-        // محاولة تشغيل الصوت تلقائياً فور تحميل الصفحة
-        window.addEventListener('DOMContentLoaded', () => {
-            let audio = document.getElementById('welcomeAudio');
-            let icon = document.getElementById('audioIcon');
-            
-            audio.play().then(() => {
-                icon.className = "fa-solid fa-pause";
-            }).catch(error => {
-                // بعض المتصفحات تمنع التشغيل التلقائي قبل تفاعل المستخدم، سيبقى الزر جاهزاً للتشغيل
-                console.log("Autoplay prevented by browser: ", error);
-            });
-
-            audio.onended = function() {
-                icon.className = "fa-solid fa-play";
-            };
-        });
+        // تشغيل الصوت تلقائياً عند أول تفاعل أو لمسة للشاشة من العميل لتجاوز قيود المتصفحات
+        document.addEventListener('click', function playWelcomeAudioOnce() {
+            if (!audioPlayed) {
+                let audio = document.getElementById('welcomeAudio');
+                let icon = document.getElementById('audioIcon');
+                audio.play().then(() => {
+                    icon.className = "fa-solid fa-pause";
+                    audioPlayed = true;
+                }).catch(e => console.log(e));
+            }
+        }, { once: true });
 
         // تشغيل وإيقاف الصوت الترحيبي يدويًا عبر الزر
         function toggleAudio() {
@@ -867,10 +863,14 @@
             if (audio.paused) {
                 audio.play();
                 icon.className = "fa-solid fa-pause";
+                audioPlayed = true;
             } else {
                 audio.pause();
                 icon.className = "fa-solid fa-play";
             }
+            audio.onended = function() {
+                icon.className = "fa-solid fa-play";
+            };
         }
 
         // توليد رقم طلب فريد ومضمون الظهور
