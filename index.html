@@ -775,14 +775,21 @@
         let cart = [];
         let currentOrderToken = "";
 
-        // توليد رقم طلب عشوائي وفريد عند فتح السلة لأول مرة
+        // توليد رقم طلب فريد فور تحميل الصفحة أو عند أول إضافة
         function generateOrderToken() {
-            let randomNum = Math.floor(1000 + Math.random() * 9000);
-            currentOrderToken = `#TG-${randomNum}`;
-            document.getElementById('orderTokenDisplay').innerText = currentOrderToken;
+            if (!currentOrderToken) {
+                let randomNum = Math.floor(1000 + Math.random() * 9000);
+                currentOrderToken = `#TG-${randomNum}`;
+            }
+            let badge = document.getElementById('orderTokenDisplay');
+            if(badge) badge.innerText = currentOrderToken;
         }
 
+        // توليد الرقم مبدئياً فور فتح الصفحة
+        generateOrderToken();
+
         function addToCart(name, price) {
+            generateOrderToken(); // التأكد من وجود رقم طلب نشط
             cart.push({ name, price });
             updateCartUI();
             
@@ -793,6 +800,7 @@
         }
 
         function updateCartUI() {
+            generateOrderToken();
             document.getElementById('cartCount').innerText = cart.length;
             let listContainer = document.getElementById('cartItemsList');
             listContainer.innerHTML = '';
@@ -816,7 +824,7 @@
             }
             document.getElementById('cartTotalPrice').innerText = total + ' ر.س';
 
-            // تجهيز نص رسالة الواتساب مع رقم الطلب التلقائي الفعلي
+            // تجهيز نص رسالة الواتساب مع ضمان إدراج رقم الطلب بشكل قاطع
             let waText = `🏷️ *طلب جديد من الكتالوج*%0A`;
             waText += `🔢 *رقم الطلب:* ${currentOrderToken}%0A`;
             waText += `🛍️ *المنتجات المطلوبة:*%0A`;
@@ -835,7 +843,7 @@
         function toggleCartModal(open) {
             let modal = document.getElementById('cartModal');
             if(open) {
-                if(!currentOrderToken) generateOrderToken(); // إنشاء رقم الطلب عند فتح السلة
+                generateOrderToken();
                 modal.classList.add('active');
             } else {
                 modal.classList.remove('active');
