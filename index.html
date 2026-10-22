@@ -775,7 +775,7 @@
         let cart = [];
         let currentOrderToken = "";
 
-        // توليد رقم طلب فريد فور تحميل الصفحة أو عند أول إضافة
+        // دالة توليد رقم طلب فريد ومضمون الظهور
         function generateOrderToken() {
             if (!currentOrderToken) {
                 let randomNum = Math.floor(1000 + Math.random() * 9000);
@@ -785,11 +785,11 @@
             if(badge) badge.innerText = currentOrderToken;
         }
 
-        // توليد الرقم مبدئياً فور فتح الصفحة
+        // توليد رقم الطلب فوراً عند تحميل الصفحة
         generateOrderToken();
 
         function addToCart(name, price) {
-            generateOrderToken(); // التأكد من وجود رقم طلب نشط
+            generateOrderToken();
             cart.push({ name, price });
             updateCartUI();
             
@@ -824,15 +824,18 @@
             }
             document.getElementById('cartTotalPrice').innerText = total + ' ر.س';
 
-            // تجهيز نص رسالة الواتساب مع ضمان إدراج رقم الطلب بشكل قاطع
-            let waText = `🏷️ *طلب جديد من الكتالوج*%0A`;
-            waText += `🔢 *رقم الطلب:* ${currentOrderToken}%0A`;
-            waText += `🛍️ *المنتجات المطلوبة:*%0A`;
+            // بناء نص رسالة الواتساب وتشفيرها بالكامل لضمان ظهور رقم الطلب بوضوح تام
+            let messageText = "طلب جديد من الكتالوج\n" +
+                              "رقم الطلب: " + currentOrderToken + "\n" +
+                              "المنتجات المطلوبة:\n";
+            
             cart.forEach((item, idx) => {
-                waText += `${idx + 1}. ${item.name} - ${item.price} ر.س%0A`;
+                messageText += (idx + 1) + ". " + item.name + " - " + item.price + " ر.س\n";
             });
-            waText += `%0A💰 *الإجمالي الكلي:* ${total} ر.س`;
-            document.getElementById('whatsappCheckoutBtn').href = `https://wa.me/966502777884?text=${waText}`;
+            messageText += "\nالإجمالي الكلي: " + total + " ر.س";
+
+            let encodedMessage = encodeURIComponent(messageText);
+            document.getElementById('whatsappCheckoutBtn').href = "https://wa.me/966502777884?text=" + encodedMessage;
         }
 
         function removeFromCart(index) {
