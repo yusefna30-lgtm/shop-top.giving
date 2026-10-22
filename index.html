@@ -12,7 +12,7 @@
             --bg-deep: #08080a;
             --card-bg: #121218;
             --accent-gold: #d4af37;
-            --accent-glow: rgba(212, 175, 55, 0.25);
+            --accent-glow: rgba(212, 175, 55, 0.3);
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
             --border-color: rgba(212, 175, 55, 0.25);
@@ -51,22 +51,28 @@
             position: relative;
         }
 
-        /* الترويسة والشعار المكبر */
+        /* الترويسة والشعار بحجم أكبر وبصريّة أوسع */
         .header-section {
             text-align: center;
             margin-bottom: 20px;
         }
 
         .brand-logo-img {
-            width: 115px;
-            height: 115px;
+            width: 145px;
+            height: 145px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2.5px solid var(--accent-gold);
-            margin: 0 auto 12px auto;
+            border: 3px solid var(--accent-gold);
+            margin: 0 auto 14px auto;
             display: block;
-            box-shadow: 0 0 30px var(--accent-glow);
+            box-shadow: 0 0 35px var(--accent-glow);
             background: #000;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .brand-logo-img:hover {
+            transform: scale(1.02);
         }
 
         .brand-name {
@@ -598,9 +604,9 @@
 
     <div class="menu-container">
         
-        <!-- الترويسة والشعار المكبر الفاخر -->
+        <!-- الترويسة والشعار بحجم كبير وفاخر -->
         <div class="header-section">
-            <img src="logo.png" alt="شعار TOP GIVING" class="brand-logo-img" onclick="openZoom('logo.png')" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\'><circle cx=\'60\' cy=\'60\' r=\'58\' fill=\'%23000\' stroke=\'%23d4af37\' stroke-width=\'2.5\'/><text x=\'50%\' y=\'55%\' font-family=\'Montserrat\' font-size=\'26\' font-weight=\'bold\' fill=\'%23d4af37\' text-anchor=\'middle\' dominant-baseline=\'middle\'>TG</text></svg>';">
+            <img src="logo.png" alt="شعار TOP GIVING" class="brand-logo-img" onclick="openZoom('logo.png')" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'145\' height=\'145\'><circle cx=\'72.5\' cy=\'72.5\' r=\'70\' fill=\'%23000\' stroke=\'%23d4af37\' stroke-width=\'3\'/><text x=\'50%\' y=\'55%\' font-family=\'Montserrat\' font-size=\'32\' font-weight=\'bold\' fill=\'%23d4af37\' text-anchor=\'middle\' dominant-baseline=\'middle\'>TG</text></svg>';">
             <h1 class="brand-name">TOP GIVING</h1>
             <div class="brand-subtitle">أزياء الشارع الفاخرة • Luxury Streetwear</div>
         </div>
@@ -755,7 +761,6 @@
     <div class="toast-msg" id="toastMsg">تمت إضافة المنتج إلى السلة بنجاح 🛍️</div>
 
     <script>
-        // مصفوفة السلة
         let cart = [];
 
         function addToCart(name, price) {
@@ -792,7 +797,6 @@
             }
             document.getElementById('cartTotalPrice').innerText = total + ' ر.س';
 
-            // تجهيز رابط الواتساب المجمع
             let waText = "السلام عليكم، أرغب في طلب المنتجات التالية من TOP GIVING:%0A";
             cart.forEach((item, idx) => {
                 waText += `${idx + 1}. ${item.name} - ${item.price} ر.س%0A`;
@@ -815,7 +819,6 @@
             }
         }
 
-        // تكبير الصورة
         function openZoom(imgSrc) {
             document.getElementById('modalImg').src = imgSrc;
             document.getElementById('imageModal').classList.add('active');
@@ -825,7 +828,6 @@
             document.getElementById('imageModal').classList.remove('active');
         }
 
-        // تبديل التبويبات
         function switchTab(tabName, btnElement) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -838,7 +840,6 @@
             btnElement.classList.add('active');
         }
 
-        // فلترة المنتجات
         function filterProducts(category, pillElement) {
             document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
             pillElement.classList.add('active');
@@ -853,7 +854,6 @@
             });
         }
 
-        // نظام النجوم التفاعلي
         let currentRating = 0;
         function setRating(starsCount) {
             currentRating = starsCount;
@@ -867,7 +867,6 @@
             });
         }
 
-        // إرسال التقييم
         function submitReview() {
             let staff = document.getElementById('staffSelect').value;
             if(!staff) {
