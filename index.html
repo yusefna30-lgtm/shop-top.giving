@@ -51,7 +51,7 @@
             position: relative;
         }
 
-        /* الترويسة وتصغير الإطار الخارجي للشعار */
+        /* الترويسة والشعار بإطار خارجي أصغر وأنيق */
         .header-section {
             text-align: center;
             margin-bottom: 20px;
@@ -62,7 +62,7 @@
             height: 110px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--accent-gold); /* إطار خارجي أصغر وأكثر دقة */
+            border: 2px solid var(--accent-gold);
             margin: 0 auto 12px auto;
             display: block;
             box-shadow: 0 0 25px var(--accent-glow);
@@ -464,7 +464,7 @@
             justify-content: center;
         }
 
-        /* نافذة السلة الممنبثقة */
+        /* نافذة السلة المنبثقة */
         .cart-modal {
             position: fixed;
             inset: 0;
@@ -505,9 +505,19 @@
             align-items: center;
         }
 
+        .order-token-badge {
+            font-size: 11px;
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--accent-gold);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-family: 'Montserrat', sans-serif;
+        }
+
         .cart-items-list {
             overflow-y: auto;
-            max-height: 40vh;
+            max-height: 38vh;
             margin-bottom: 14px;
             display: flex;
             flex-direction: column;
@@ -737,15 +747,16 @@
         <img id="modalImg" src="" alt="معاينة المنتج">
     </div>
 
-    <!-- نافذة السلة الممنبثقة (Cart Modal) -->
+    <!-- نافذة السلة المنبثقة (Cart Modal) -->
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
             <div class="cart-header-title">
-                <span>سلة المشتريات الخاصة بك</span>
+                <span>سلة المشتريات</span>
+                <span class="order-token-badge" id="orderTokenDisplay">رقم الطلب: #TG-0000</span>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 18px;" onclick="toggleCartModal(false)"></i>
             </div>
             <div class="cart-items-list" id="cartItemsList">
-                <!-- المنتجات المضافة ستظهر هنا ديناميكياً -->
+                <!-- المنتجات المضافة -->
             </div>
             <div class="cart-total">
                 <span>الإجمالي الكلي:</span>
@@ -762,6 +773,14 @@
 
     <script>
         let cart = [];
+        let currentOrderToken = "";
+
+        // توليد رقم طلب عشوائي وفريد عند فتح السلة لأول مرة
+        function generateOrderToken() {
+            let randomNum = Math.floor(1000 + Math.random() * 9000);
+            currentOrderToken = `#TG-${randomNum}`;
+            document.getElementById('orderTokenDisplay').innerText = `رقم الطلب: ${currentOrderToken}`;
+        }
 
         function addToCart(name, price) {
             cart.push({ name, price });
@@ -797,11 +816,14 @@
             }
             document.getElementById('cartTotalPrice').innerText = total + ' ر.س';
 
-            let waText = "السلام عليكم، أرغب في طلب المنتجات التالية من TOP GIVING:%0A";
+            // تجهيز نص رسالة الواتساب مع رقم الطلب التلقائي
+            let waText = `🏷️ *طلب جديد من الكتالوج*%0A`;
+            waText += `🔢 *رقم الطلب:* ${currentOrderToken}%0A`;
+            waText += `🛍️ *المنتجات المطلوبة:*%0A`;
             cart.forEach((item, idx) => {
                 waText += `${idx + 1}. ${item.name} - ${item.price} ر.س%0A`;
             });
-            waText += `%0Aالإجمالي: ${total} ر.س`;
+            waText += `%0A💰 *الإجمالي الكلي:* ${total} ر.س`;
             document.getElementById('whatsappCheckoutBtn').href = `https://wa.me/966502777884?text=${waText}`;
         }
 
@@ -813,6 +835,7 @@
         function toggleCartModal(open) {
             let modal = document.getElementById('cartModal');
             if(open) {
+                if(!currentOrderToken) generateOrderToken(); // إنشاء رقم الطلب عند فتح السلة
                 modal.classList.add('active');
             } else {
                 modal.classList.remove('active');
