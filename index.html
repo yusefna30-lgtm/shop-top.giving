@@ -496,7 +496,7 @@
         }
 
         .cart-header-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             color: #fff;
             margin-bottom: 14px;
@@ -752,7 +752,7 @@
         <div class="cart-content">
             <div class="cart-header-title">
                 <span>سلة المشتريات</span>
-                <span class="order-token-badge" id="orderTokenDisplay">رقم الطلب: #TG-0000</span>
+                <span class="order-token-badge" id="orderTokenDisplay">#TG-0000</span>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 18px;" onclick="toggleCartModal(false)"></i>
             </div>
             <div class="cart-items-list" id="cartItemsList">
@@ -779,7 +779,7 @@
         function generateOrderToken() {
             let randomNum = Math.floor(1000 + Math.random() * 9000);
             currentOrderToken = `#TG-${randomNum}`;
-            document.getElementById('orderTokenDisplay').innerText = `رقم الطلب: ${currentOrderToken}`;
+            document.getElementById('orderTokenDisplay').innerText = currentOrderToken;
         }
 
         function addToCart(name, price) {
@@ -816,7 +816,7 @@
             }
             document.getElementById('cartTotalPrice').innerText = total + ' ر.س';
 
-            // تجهيز نص رسالة الواتساب مع رقم الطلب التلقائي
+            // تجهيز نص رسالة الواتساب مع رقم الطلب التلقائي الفعلي
             let waText = `🏷️ *طلب جديد من الكتالوج*%0A`;
             waText += `🔢 *رقم الطلب:* ${currentOrderToken}%0A`;
             waText += `🛍️ *المنتجات المطلوبة:*%0A`;
