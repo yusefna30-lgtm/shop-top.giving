@@ -49,6 +49,7 @@
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(212, 175, 55, 0.2);
             padding: 20px;
             position: relative;
+            padding-bottom: 70px; /* مساحة إضافية لشريط السلة العائم أسفل الشاشة */
         }
 
         /* الترويسة والشعار بإطار خارجي أصغر وأنيق */
@@ -58,8 +59,8 @@
         }
 
         .brand-logo-img {
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--accent-gold);
@@ -77,14 +78,14 @@
 
         .brand-name {
             font-family: 'Montserrat', sans-serif;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             letter-spacing: 1px;
             color: #fff;
         }
 
         .brand-subtitle {
-            font-size: 12px;
+            font-size: 11.5px;
             color: var(--accent-gold);
             font-weight: 600;
             margin-top: 2px;
@@ -139,7 +140,7 @@
             padding: 5px;
             border-radius: 18px;
             border: 1px solid rgba(255,255,255,0.06);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .tab-btn {
@@ -211,43 +212,58 @@
             font-weight: 700;
         }
 
-        /* شريط السلة العائم المصغر داخل الكتالوج */
-        .cart-bar {
+        /* شريط السلة العائم أسفل الشاشة (يظهر فقط عند الطلب) */
+        .floating-cart-bar {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            right: 20px;
             background: linear-gradient(135deg, #181822, #20202c);
             border: 1px solid var(--accent-gold);
-            border-radius: 16px;
-            padding: 10px 14px;
-            display: flex;
+            border-radius: 18px;
+            padding: 12px 16px;
+            display: none; /* مخفي افتراضياً لحين إضافة منتجات */
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            z-index: 50;
+            animation: slideUpCart 0.3s ease;
+        }
+
+        .floating-cart-bar.active {
+            display: flex;
+        }
+
+        @keyframes slideUpCart {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .cart-info {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 12.5px;
+            gap: 10px;
+            font-size: 13px;
             font-weight: 700;
             color: #fff;
         }
 
         .cart-info i {
             color: var(--accent-gold);
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .view-cart-btn {
             background: var(--accent-gold);
             color: #000;
             border: none;
-            padding: 6px 14px;
-            border-radius: 10px;
+            padding: 8px 16px;
+            border-radius: 12px;
             font-weight: 800;
-            font-size: 11.5px;
+            font-size: 12px;
             cursor: pointer;
             transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         }
 
         .view-cart-btn:hover {
@@ -656,12 +672,12 @@
         
         <!-- الترويسة والشعار بإطار خارجي أصغر وأنيق -->
         <div class="header-section">
-            <img src="logo.png" alt="شعار TOP GIVING" class="brand-logo-img" onclick="openZoom('logo.png')" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'110\' height=\'110\'><circle cx=\'55\' cy=\'55\' r=\'53\' fill=\'%23000\' stroke=\'%23d4af37\' stroke-width=\'2\'/><text x=\'50%\' y=\'55%\' font-family=\'Montserrat\' font-size=\'28\' font-weight=\'bold\' fill=\'%23d4af37\' text-anchor=\'middle\' dominant-baseline=\'middle\'>TG</text></svg>';">
+            <img src="logo.png" alt="شعار TOP GIVING" class="brand-logo-img" onclick="openZoom('logo.png')" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><circle cx=\'50\' cy=\'50\' r=\'48\' fill=\'%23000\' stroke=\'%23d4af37\' stroke-width=\'2\'/><text x=\'50%\' y=\'55%\' font-family=\'Montserrat\' font-size=\'26\' font-weight=\'bold\' fill=\'%23d4af37\' text-anchor=\'middle\' dominant-baseline=\'middle\'>TG</text></svg>';">
             <h1 class="brand-name">TOP GIVING</h1>
             <div class="brand-subtitle">أزياء الشارع الفاخرة • Luxury Streetwear</div>
         </div>
 
-        <!-- مشغل الرسالة الصوتية للترحيب بالزيارة (welcome-visit.mp3) -->
+        <!-- مشغل الرسالة الصوتية للزيارة (welcome-visit.mp3) -->
         <div class="audio-greeting-box">
             <div class="audio-info">
                 <i class="fa-solid fa-volume-high"></i>
@@ -685,15 +701,6 @@
 
         <!-- (1) تبويب الكتالوج الرقمي -->
         <div id="catalogTab" class="tab-content active">
-            
-            <!-- شريط السلة العائم -->
-            <div class="cart-bar">
-                <div class="cart-info">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                    <span>السلة: <b id="cartCount">0</b> منتجات</span>
-                </div>
-                <button class="view-cart-btn" onclick="toggleCartModal(true)">عرض السلة وطلب</button>
-            </div>
 
             <!-- فلاتر الأقسام -->
             <div class="filter-pills">
@@ -789,6 +796,15 @@
             </a>
         </div>
 
+        <!-- شريط السلة العائم أسفل الشاشة (يظهر فقط عند إضافة منتجات) -->
+        <div class="floating-cart-bar" id="floatingCartBar">
+            <div class="cart-info">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span>السلة: <b id="cartCount">0</b> منتجات</span>
+            </div>
+            <button class="view-cart-btn" onclick="toggleCartModal(true)">عرض السلة وطلب</button>
+        </div>
+
         <!-- التذييل -->
         <div class="menu-footer">TOP GIVING ELECTRONIC MENU</div>
     </div>
@@ -843,7 +859,7 @@
             };
         }
 
-        // دالة توليد رقم طلب فريد ومضمون الظهور
+        // توليد رقم طلب فريد ومضمون الظهور
         function generateOrderToken() {
             if (!currentOrderToken) {
                 let randomNum = Math.floor(1000 + Math.random() * 9000);
@@ -869,6 +885,15 @@
         function updateCartUI() {
             generateOrderToken();
             document.getElementById('cartCount').innerText = cart.length;
+            
+            // إظهار أو إخفاء شريط السلة العائم أسفل الشاشة بناءً على وجود منتجات
+            let floatingBar = document.getElementById('floatingCartBar');
+            if (cart.length > 0) {
+                floatingBar.classList.add('active');
+            } else {
+                floatingBar.classList.remove('active');
+            }
+
             let listContainer = document.getElementById('cartItemsList');
             listContainer.innerHTML = '';
             
@@ -958,7 +983,6 @@
         function setRating(starsCount) {
             currentRating = starsCount;
             let stars = document.querySelectorAll('.star');
-            stars.documentElement.classList // safe
             stars.forEach((star, index) => {
                 if(index < starsCount) {
                     star.classList.add('active');
