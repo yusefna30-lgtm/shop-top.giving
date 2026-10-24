@@ -856,8 +856,8 @@
     <div class="toast-msg" id="toastMsg">تمت إضافة المنتج إلى السلة بنجاح 🛍️</div>
 
     <script>
-        // رابط قاعدة بيانات Firebase (قم بتغييره برابط مشروعك الفعلي)
-        const FIREBASE_DB_URL = "https://YOUR_FIREBASE_DATABASE_URL.firebaseio.com/";
+        // رابط قاعدة بيانات Firebase الحقيقي الخاص بك
+        const FIREBASE_DB_URL = "https://shirt-guestbook-default-rtdb.firebaseio.com/";
 
         let cart = [];
         let currentOrderToken = "";
@@ -1016,7 +1016,7 @@
                     alert("حدث خطأ في الاتصال بالسحابة");
                 });
             } else {
-                alert("تم تسجيل البيانات بنجاح (يرجى ربط قاعدة البيانات لحفظها سحابياً)");
+                alert("تم تسجيل البيانات بنجاح");
                 document.getElementById('vipCustomerName').value = '';
                 document.getElementById('vipCustomerPhone').value = '';
             }
